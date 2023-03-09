@@ -7,6 +7,7 @@ import SongsPlayer from '@/components/SongsPlayer.vue'
 
 const songs = ref<Song[]>([])
 const isLoading = ref(false)
+const addNotificationShow = ref(false)
 
 const playingSongs: Song[] = [
   {
@@ -42,7 +43,10 @@ onMounted(async () => {
 const addToFavorites = (id: string) => {
   const song = playingSongs.find((s) => s.id === id)
 
-  if (song) addSongs(song)
+  if (song) {
+    addSongs(song)
+    addNotificationShow.value = true
+  }
 }
 </script>
 
@@ -50,6 +54,15 @@ const addToFavorites = (id: string) => {
   <main>
     <SongsPlayer @add-to-favorite="addToFavorites" :songs="playingSongs" />
     <SongsList :is-loading="isLoading" :songs="songs" />
+
+    <v-snackbar
+      :timeout="2000"
+      color="primary"
+      variant="tonal"
+      v-model="addNotificationShow"
+    >
+      Song add to favorites!
+    </v-snackbar>
   </main>
 </template>
 
